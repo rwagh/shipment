@@ -23,7 +23,7 @@ routes.get("/me", async (req, res) => {
   console.log(result);
   res.status(200).json(result);
 });
-routes.get("/carriers", async (req, res) => {
+routes.get("/carrier/list", async (req, res) => {
   let url = `${process.env.API_URL}carriers`;
   let response = await fetch(url, {
     method: "GET",
@@ -34,18 +34,17 @@ routes.get("/carriers", async (req, res) => {
   res.status(200).json(result);
 });
 
-routes.get("/addresses", async (req, res) => {
+routes.get("/address/list", async (req, res) => {
   let url = `${process.env.API_URL}addresses`;
   let response = await fetch(url, {
     method: "GET",
     headers: headers,
   });
   let result = await response.json();
-  console.log(result);
-  res.status(200).json(result);
+  res.status(200).json(result.addresses);
 });
 
-routes.post("/addresses", async (req, res) => {
+routes.post("/address/create", async (req, res) => {
   let url = `${process.env.API_URL}addresses`;
   let add = req.body;
   let response = await fetch(url, {
