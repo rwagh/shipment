@@ -47,18 +47,7 @@ routes.get("/addresses", async (req, res) => {
 
 routes.post("/addresses", async (req, res) => {
   let url = `${process.env.API_URL}addresses`;
-  let add = {
-    company: "Muster-Company",
-    first_name: "Max",
-    last_name: "Mustermann",
-    street: "Musterstraße",
-    street_no: "42",
-    zip_code: "54321",
-    city: "Musterstadt",
-    country: "DE",
-    email: "max@mustermann.baz",
-    phone: "+491234567890",
-  };
+  let add = req.body;
   let response = await fetch(url, {
     method: "POST",
     headers: headers,
