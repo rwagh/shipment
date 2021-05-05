@@ -1,7 +1,8 @@
 import express from "express";
+import { Request, Response } from "express";
 import fetch from "node-fetch";
 require("dotenv").config();
-const routes = express.Router();
+const address = express.Router();
 
 let api_key = Buffer.from(`${process.env.API_KEY}`).toString("base64");
 let headers = {
@@ -9,32 +10,17 @@ let headers = {
   Authorization: `Basic ${api_key}`,
 };
 
-routes.get("/", async (req, res) => {
-  res.status(200).json({ status: "it work's" });
-});
-
-routes.get("/me", async (req, res) => {
-  let url = `${process.env.API_URL}me`;
+address.get("/addresses/:id", async (req:Request, res:Response) => {
+  let url = `${process.env.API_URL}addresses/${req.params.id}`;
   let response = await fetch(url, {
     method: "GET",
     headers: headers,
   });
   let result = await response.json();
-  console.log(result);
-  res.status(200).json(result);
-});
-routes.get("/carrier/list", async (req, res) => {
-  let url = `${process.env.API_URL}carriers`;
-  let response = await fetch(url, {
-    method: "GET",
-    headers: headers,
-  });
-  let result = await response.json();
-  console.log(result);
   res.status(200).json(result);
 });
 
-routes.get("/address/list", async (req, res) => {
+address.get("/addresses", async (req:Request, res:Response) => {
   let url = `${process.env.API_URL}addresses`;
   let response = await fetch(url, {
     method: "GET",
@@ -44,7 +30,7 @@ routes.get("/address/list", async (req, res) => {
   res.status(200).json(result.addresses);
 });
 
-routes.post("/address/create", async (req, res) => {
+address.post("/addresses", async (req:Request, res:Response) => {
   let url = `${process.env.API_URL}addresses`;
   let add = req.body;
   let response = await fetch(url, {
@@ -57,4 +43,4 @@ routes.post("/address/create", async (req, res) => {
   res.status(200).json(result);
 });
 
-export default routes;
+export default address;
