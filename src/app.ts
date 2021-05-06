@@ -5,6 +5,7 @@ import address  from './routes/address';
 import quotes  from './routes/quotes';
 import rates  from './routes/rates';
 import pickups  from './routes/pickups';
+import shipments  from './routes/shipments';
 
 const app = express();
 require("dotenv").config();
@@ -17,6 +18,7 @@ app.use(address);
 app.use(quotes);
 app.use(rates);
 app.use(pickups);
+app.use(shipments);
 
 app.listen(8080,()=>{
     console.log("Server started at 8080");
