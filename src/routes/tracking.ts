@@ -1,10 +1,9 @@
 import express from "express";
 import { Request, Response } from "express";
 import fetch from "node-fetch";
-require("dotenv").config();
 import validate from "../validators";
-
-const address = express.Router();
+require("dotenv").config();
+const tracking = express.Router();
 
 let api_key = Buffer.from(`${process.env.API_KEY}`).toString("base64");
 let headers = {
@@ -12,42 +11,45 @@ let headers = {
   Authorization: `Basic ${api_key}`,
 };
 
-address.get("/addresses/:id", async (req: Request, res: Response) => {
-  let url = `${process.env.API_URL}addresses/${req.params.id}`;
+tracking.get("/trackers/:id", async (req: Request, res: Response) => {
+  let url = `${process.env.API_URL}trackers/${req.params.id}`;
+
   let response = await fetch(url, {
     method: "GET",
     headers: headers,
   });
   let result = await response.json();
+  console.log(result);
   res.status(200).json(result);
 });
 
-address.get("/addresses", async (req: Request, res: Response) => {
-  let url = `${process.env.API_URL}addresses`;
+tracking.get("/trackers", async (req: Request, res: Response) => {
+  let url = `${process.env.API_URL}trackers`;
+
   let response = await fetch(url, {
     method: "GET",
     headers: headers,
   });
   let result = await response.json();
-  res.status(200).json(result.addresses);
+  console.log(result);
+  res.status(200).json(result.trackers);
 });
 
-address.post("/addresses", async (req: Request, res: Response) => {
-  let url = `${process.env.API_URL}addresses`;
-  let add = req.body;
-  let check = validate.address.check(add);
-  
-  if(check.length >0){
-    res.status(400).json({"error": check[0].message});
-  }else{
+tracking.post("/trackers", async (req: Request, res: Response) => {
+  let url = `${process.env.API_URL}trackers`;
+  let args = req.body;
+  let check = validate.tracker.check(args);
+  if (check.length > 0) {
+    res.status(400).json({ error: check[0].message });
+  } else {
     let response = await fetch(url, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify(add),
+      body: JSON.stringify(args),
     });
     let result = await response.json();
+    console.log(result);
     res.status(200).json(result);
   }
 });
-
-export default address;
+export default tracking;
